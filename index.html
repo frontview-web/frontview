@@ -328,7 +328,13 @@
                 required
               ></textarea>
             </div>
-            <button class="btn btn-primary send" id="whatsappButton">Send WhatsApp Message</button>
+            <div class="form">
+              <div class="input-group margin-bottom-sm">
+                <button class="btn btn-primary send" id="whatsappButton">
+                  <i class="fa fa-comment-o fa-fw"></i> Send WhatsApp Message
+                </button>
+              </div>
+            </div>
           </div>
           <div class="col-md-6 text-center">
             <br /><br />
@@ -405,17 +411,26 @@
     <script src="js/bootstrap3-wysihtml5.all.min.js"></script>
     <script src="js/dashboard.js"></script>
     <script>
-      document.getElementById("whatsappButton").addEventListener("click", function () {
-        var phoneNumber = "+918320127106"; // Replace with actual number
-        var name = document.getElementById("name").value;
-        var message = document.getElementById("message").value;
+      document.getElementById("whatsappButton").addEventListener("click", sendWhatsappMessage, { passive: true });
+      document.getElementById("whatsappButton").addEventListener("touchstart", sendWhatsappMessage, { passive: true });
+
+      function sendWhatsappMessage() {
+        var phoneNumber = "918320127106"; // No '+'
+        var name = document.getElementById("name").value.trim();
+        var message = document.getElementById("message").value.trim();
+
+        if (!name || !message) {
+          alert("Please enter your name and message.");
+          return;
+        }
 
         var encodedMessage = encodeURIComponent(`Name: ${name}\nMessage: ${message}`);
         var whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-        name.value = "";
-        message.value = "";
-        window.open(whatsappLink, "_blank"); // Opens in a new tab
-      });
+        window.open(whatsappLink, "_blank");
+        // Clear fields after sending
+        document.getElementById("name").value = "";
+        document.getElementById("message").value = "";
+      }
     </script>
   </body>
 </html>
